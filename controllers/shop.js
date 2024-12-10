@@ -3,17 +3,16 @@ const Cart = require("../models/cart");
 
 exports.getIndex = (req, res, next) => {
     Product.findAll()
-    .then((result) => {
-        console.log(result)
-        res.render("shop/index", {
-            prods: result,
-            pageTitle: "Shop",
-            path: "/",
+        .then((result) => {
+            res.render("shop/index", {
+                prods: result,
+                pageTitle: "Shop",
+                path: "/",
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting data from database:", error);
         });
-    })
-    .catch(error => {
-        console.log('Error getting data from database:', error)
-    })
 };
 
 exports.getProducts = (req, res, next) => {
@@ -25,25 +24,23 @@ exports.getProducts = (req, res, next) => {
                 path: "/products",
             });
         })
-        .catch(error => {
-            console.log('Error getting data from database:', error) 
-        })
+        .catch((error) => {
+            console.log("Error getting data from database:", error);
+        });
 };
 
 exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
-    Product.findById(prodId)
-        .then(([product]) => {
-            console.log(product);
+
+    Product.findByPk(prodId)
+        .then((result) => {
             res.render("shop/product-detail", {
-                product: product[0],
-                pageTitle: product.title,
+                product: result,
+                pageTitle: result.title,
                 path: "/products",
             });
         })
-        .catch((error) =>
-            console.log("Error getting a product from database:", error)
-        );
+        .catch((error) => console.log(error));
 };
 
 exports.getCart = (req, res, next) => {
